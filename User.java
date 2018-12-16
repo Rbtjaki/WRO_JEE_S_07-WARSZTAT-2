@@ -21,9 +21,9 @@ public class User {
 
     String username;
     String email;
-    String password;
+    String password = this.password;
+            //org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt());;
     int user_id;
-    //this.password = BCrypt.hashpw(password, BCrypt.gensalt());
 
     public int getId() {
         return id;
@@ -80,4 +80,14 @@ public class User {
             loadedUser.email = resultSet.getString("email");
             return loadedUser;}
         return null;}
+
+    public void delete(Connection conn) throws SQLException {
+        if (this.id != 0) {
+            String sql = "DELETE FROM users WHERE id=?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1, this.id);
+            preparedStatement.executeUpdate();
+            this.id = 0;
+        }
+    }
 }
